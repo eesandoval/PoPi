@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QtNetwork/QNetworkAccessManager>
+#include <qxtglobalshortcut.h>
 namespace Ui {
 class MainWindow;
 }
@@ -15,8 +16,10 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+public slots:
+    void handleGlobalShortcut();
+
 private slots:
-    void on_screenshotButton_clicked();
     void replyFinished(QNetworkReply* reply);
 
 private:
@@ -26,6 +29,7 @@ private:
     void uploadScreenshot();
     QString convertScreenshot();
 
+    QxtGlobalShortcut m_globalShortcut;
     QPixmap originalPixmap;
     QString fileName;
     QUrl imgurURL;

@@ -6,7 +6,11 @@
 
 QT       += core gui
 QT       += network
+QT += gui-private
+QT += x11extras
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+LIBS += -lX11
 
 TARGET = PoPi
 TEMPLATE = app
@@ -25,10 +29,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    qxtglobalshortcut_x11.cpp \
+    qxtglobalshortcut.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    qxtglobalshortcut_p.h \
+    qxtglobalshortcut.h \
+    xcbkeyboard.h \
+    qxtglobalshortcut_export.h
 
 FORMS += \
         mainwindow.ui

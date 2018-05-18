@@ -11,19 +11,26 @@
 #include <QJsonParseError>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QShortcut>
+#include <QDebug>
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     imgurURL = QUrl("https://api.imgur.com/3/image");
-    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Dollar ), this, SLOT(on_screenshotButton_clicked()));
+    m_globalShortcut.setShortcut(QKeySequence("CTRL+Shift+4"));
+    m_globalShortcut.setEnabled(true);
+    connect(&m_globalShortcut, SIGNAL(activated(QxtGlobalShortcut*)), SLOT(handleGlobalShortcut()));
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::handleGlobalShortcut()
+{
+    shootScreen();
 }
 
 void MainWindow::shootScreen()
@@ -84,9 +91,4 @@ QString MainWindow::convertScreenshot()
     byteArray = file->readAll();
     result = QString(byteArray.toBase64());
     return result;
-}
-
-void MainWindow::on_screenshotButton_clicked()
-{
-    shootScreen();
 }
