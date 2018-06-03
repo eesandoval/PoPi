@@ -4,6 +4,10 @@
 #include <QMainWindow>
 #include <QtNetwork/QNetworkAccessManager>
 #include <qxtglobalshortcut.h>
+#include <QSoundEffect>
+#include <QSystemTrayIcon>
+#include <QIcon>
+#include <QElapsedTimer>
 namespace Ui {
 class MainWindow;
 }
@@ -19,8 +23,12 @@ public:
 public slots:
     void handleGlobalShortcut();
 
+protected:
+    void changeEvent(QEvent *event);
+
 private slots:
     void replyFinished(QNetworkReply* reply);
+    void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
 
 private:
     Ui::MainWindow *ui;
@@ -29,10 +37,18 @@ private:
     void uploadScreenshot();
     QString convertScreenshot();
 
+    QString shutterEffectFileName = "media/camera_shutter.wav";
+    QString iconFileName = "media/icon.png";
     QxtGlobalShortcut m_globalShortcut;
     QPixmap originalPixmap;
     QString fileName;
     QUrl imgurURL;
+    QSoundEffect shutterEffect;
+    QSystemTrayIcon *trayIcon;
+    QMenu *trayIconMenu;
+    QElapsedTimer *timer;
+    QAction *quitAction;
+    QIcon icon;
 };
 
 #endif // MAINWINDOW_H

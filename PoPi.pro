@@ -8,6 +8,7 @@ QT       += core gui
 QT       += network
 QT += gui-private
 QT += x11extras
+QT += multimedia
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 LIBS += -lX11
@@ -42,3 +43,7 @@ HEADERS += \
 
 FORMS += \
         mainwindow.ui
+
+DISTFILES += \
+    media/camera_shutter.wav \
+    media/icon.png
