@@ -4,14 +4,11 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
-QT       += network
-QT += gui-private
-QT += x11extras
-QT += multimedia
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT += core gui network multimedia widgets
 
-LIBS += -lX11
+unix:QT = x11extras
+unix:LIBS += -lX11 -lxcb
+unix:QMAKE_CXXFLAGS += "-std=c++11"
 
 TARGET = PoPi
 TEMPLATE = app
@@ -27,23 +24,22 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+HEADERS += \
+    mainwindow.h \
+    qglobalshortcut.h
 
 SOURCES += \
-        main.cpp \
+    main.cpp \
     mainwindow.cpp \
-    qxtglobalshortcut_x11.cpp \
-    qxtglobalshortcut.cpp
+    qglobalshortcut.cc
 
-HEADERS += \
-        mainwindow.h \
-    qxtglobalshortcut_p.h \
-    qxtglobalshortcut.h \
-    xcbkeyboard.h \
-    qxtglobalshortcut_export.h
+win32:SOURCES += qglobalshortcut_win.cc
+unix:SOURCES  += qglobalshortcut_x11.cc
 
 FORMS += \
         mainwindow.ui
 
-DISTFILES += \
-    media/camera_shutter.wav \
-    media/icon.png
+DISTFILES +=
+
+RESOURCES += \
+    resources.qrc

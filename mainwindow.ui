@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>To take a screenshot, press CTRL + Shift + 4</string>
+     <string>To take a screenshot, press CTRL + Shift + 6</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">

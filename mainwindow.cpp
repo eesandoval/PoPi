@@ -22,9 +22,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     setFixedSize(width(), height());
     imgurURL = QUrl("https://api.imgur.com/3/image");
-    m_globalShortcut.setShortcut(QKeySequence("CTRL+Shift+4"));
-    m_globalShortcut.setEnabled(true);
-    connect(&m_globalShortcut, SIGNAL(activated(QxtGlobalShortcut*)), SLOT(handleGlobalShortcut()));
+    m_globalShortcut.setKey(QKeySequence("CTRL+Shift+6"));
+    connect(&m_globalShortcut, SIGNAL(activated()), SLOT(handleGlobalShortcut()));
     quitAction = new QAction(tr("&Quit"), this);
     connect(quitAction, &QAction::triggered, this, &QCoreApplication::quit);
     trayIconMenu = new QMenu(this);

@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QtNetwork/QNetworkAccessManager>
-#include <qxtglobalshortcut.h>
+#include <qglobalshortcut.h>
 #include <QSoundEffect>
 #include <QSystemTrayIcon>
 #include <QIcon>
@@ -37,9 +37,9 @@ private:
     void uploadScreenshot();
     QString convertScreenshot();
 
-    QString shutterEffectFileName = "media/camera_shutter.wav";
-    QString iconFileName = "media/icon.png";
-    QxtGlobalShortcut m_globalShortcut;
+    QString shutterEffectFileName = ":/media/camera_shutter.wav";
+    QString iconFileName = ":/media/icon.png";
+    QGlobalShortcut  m_globalShortcut;
     QPixmap originalPixmap;
     QString fileName;
     QUrl imgurURL;

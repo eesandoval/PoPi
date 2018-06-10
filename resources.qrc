@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>media/camera_shutter.wav</file>
+        <file>media/icon.png</file>
+    </qresource>
+</RCC>
