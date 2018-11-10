@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QGuiApplication>
 #include <QUrlQuery>
-#include <QtNetwork/QNetworkRequest>
+#include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QFile>
 #include <QWindow>
@@ -11,8 +11,8 @@
 #include <QJsonParseError>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QDebug>
 #include <QMenu>
+#include "captureregion.h"
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
@@ -20,10 +20,10 @@ MainWindow::MainWindow(QWidget *parent) :
     icon(iconFileName)
 {
     ui->setupUi(this);
-    setFixedSize(width(), height());
+    //setFixedSize(width(), height());
     imgurURL = QUrl("https://api.imgur.com/3/image");
-    m_globalShortcut.setKey(QKeySequence("CTRL+Shift+6"));
-    connect(&m_globalShortcut, SIGNAL(activated()), SLOT(handleGlobalShortcut()));
+    //connect(&m_globalShortcut, SIGNAL(activated()), SLOT(handleGlobalShortcut()));
+    //connect(&m_globalShortcutRegion, SIGNAL(activated()), SLOT(handleRegionShortcut()));
     quitAction = new QAction(tr("&Quit"), this);
     connect(quitAction, &QAction::triggered, this, &QCoreApplication::quit);
     trayIconMenu = new QMenu(this);
@@ -35,8 +35,6 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowIcon(icon);
     shutterEffect.setSource(QUrl::fromLocalFile(shutterEffectFileName));
     shutterEffect.setVolume(0.25f);
-    timer = new QElapsedTimer();
-    timer->start();
 }
 
 MainWindow::~MainWindow()
@@ -46,10 +44,14 @@ MainWindow::~MainWindow()
 
 void MainWindow::changeEvent(QEvent *event)
 {
-    if (event->type() == QEvent::WindowStateChange && isMinimized() && timer->elapsed() > 1000)
+    if (event->type() == QEvent::WindowStateChange && isMinimized() && !overrideMinimize)
     {
         this->hide();
-        trayIcon->showMessage("PoPi - Minimized", "PoPi will stay minimized in the system tray. To quit, right click the icon and choose <b>Quit</b>");
+        if (!displayedTrayMessage)
+        {
+            trayIcon->showMessage("PoPi - Minimized", "PoPi will stay minimized in the system tray. To quit, right click the icon and choose <b>Quit</b>", icon, 3000);
+            displayedTrayMessage = true;
+        }
     }
     else
     {
@@ -57,9 +59,30 @@ void MainWindow::changeEvent(QEvent *event)
     }
 }
 
-void MainWindow::handleGlobalShortcut()
+void MainWindow::handleRegionShortcut()
 {
+    overrideMinimize = true;
+    this->setWindowFlags(Qt::FramelessWindowHint);
+    this->showFullScreen();
     shootScreen();
+    region = new captureregion(this);
+    region->setImageLabel(originalPixmap);
+    region->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint);
+    region->showFullScreen();
+}
+
+void MainWindow::returnRegionShortcut(QPixmap *image)
+{
+
+    this->originalPixmap = *(image);
+    region->close();
+    Qt::WindowFlags flags = windowFlags();
+    flags &= -Qt::FramelessWindowHint;
+    setWindowFlags(flags);
+    this->hide();
+    saveScreenshot();
+    uploadScreenshot();
+    overrideMinimize = false;
 }
 
 void MainWindow::shootScreen()
@@ -71,8 +94,6 @@ void MainWindow::shootScreen()
         return;
     shutterEffect.play();
     originalPixmap = screen->grabWindow(0);
-    saveScreenshot();
-    uploadScreenshot();
 }
 
 void MainWindow::saveScreenshot()
@@ -130,6 +151,5 @@ void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
     if (reason == QSystemTrayIcon::Trigger || reason == QSystemTrayIcon::DoubleClick || reason == QSystemTrayIcon::MiddleClick)
     {
         this->show();
-        timer->restart();
     }
 }

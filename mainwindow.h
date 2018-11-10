@@ -2,12 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QtNetwork/QNetworkAccessManager>
-#include <qglobalshortcut.h>
+#include <QNetworkAccessManager>
 #include <QSoundEffect>
 #include <QSystemTrayIcon>
 #include <QIcon>
-#include <QElapsedTimer>
+#include "captureregion.h"
 namespace Ui {
 class MainWindow;
 }
@@ -19,9 +18,9 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
 public slots:
-    void handleGlobalShortcut();
+    void handleRegionShortcut();
+    void returnRegionShortcut(QPixmap *image);
 
 protected:
     void changeEvent(QEvent *event);
@@ -36,19 +35,20 @@ private:
     void saveScreenshot();
     void uploadScreenshot();
     QString convertScreenshot();
+    bool displayedTrayMessage = false;
+    bool overrideMinimize = false;
 
     QString shutterEffectFileName = ":/media/camera_shutter.wav";
     QString iconFileName = ":/media/icon.png";
-    QGlobalShortcut  m_globalShortcut;
     QPixmap originalPixmap;
     QString fileName;
     QUrl imgurURL;
     QSoundEffect shutterEffect;
     QSystemTrayIcon *trayIcon;
     QMenu *trayIconMenu;
-    QElapsedTimer *timer;
     QAction *quitAction;
     QIcon icon;
+    captureregion *region;
 };
 
 #endif // MAINWINDOW_H

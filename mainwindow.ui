@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>377</width>
-    <height>58</height>
+    <width>406</width>
+    <height>90</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>To take a screenshot, press CTRL + Shift + 6</string>
+     <string>To take a screenshot, press CTRL + Shift + 4</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
@@ -32,7 +32,7 @@
      <rect>
       <x>0</x>
       <y>20</y>
-      <width>351</width>
+      <width>381</width>
       <height>17</height>
      </rect>
     </property>

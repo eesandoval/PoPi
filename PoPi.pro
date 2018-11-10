@@ -4,11 +4,9 @@
 #
 #-------------------------------------------------
 
-QT += core gui network multimedia widgets
+QT += core gui network multimedia widgets x11extras
 
-unix:QT = x11extras
-unix:LIBS += -lX11 -lxcb
-unix:QMAKE_CXXFLAGS += "-std=c++11"
+LIBS += -lX11
 
 TARGET = PoPi
 TEMPLATE = app
@@ -26,18 +24,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 HEADERS += \
     mainwindow.h \
-    qglobalshortcut.h
+    captureregion.h \
+    eventfilter.h
 
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    qglobalshortcut.cc
-
-win32:SOURCES += qglobalshortcut_win.cc
-unix:SOURCES  += qglobalshortcut_x11.cc
+    captureregion.cpp \
+    eventfilter.cpp
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    captureregion.ui
 
 DISTFILES +=
 
