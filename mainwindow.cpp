@@ -12,18 +12,17 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QMenu>
+#include <QFileDialog>
 #include "captureregion.h"
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     shutterEffect(this),
-    icon(iconFileName)
+    icon(iconFileName),
+    jingleEffect(this)
 {
     ui->setupUi(this);
-    //setFixedSize(width(), height());
     imgurURL = QUrl("https://api.imgur.com/3/image");
-    //connect(&m_globalShortcut, SIGNAL(activated()), SLOT(handleGlobalShortcut()));
-    //connect(&m_globalShortcutRegion, SIGNAL(activated()), SLOT(handleRegionShortcut()));
     quitAction = new QAction(tr("&Quit"), this);
     connect(quitAction, &QAction::triggered, this, &QCoreApplication::quit);
     trayIconMenu = new QMenu(this);
@@ -31,15 +30,30 @@ MainWindow::MainWindow(QWidget *parent) :
     trayIcon = new QSystemTrayIcon(icon, this);
     trayIcon->setContextMenu(trayIconMenu);
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
+    connect(ui->browseDirectoriesPushButton, SIGNAL(clicked(bool)), this, SLOT(setSaveDirectory()));
+    connect(ui->saveFilesCheckBox, SIGNAL(toggled(bool)), this, SLOT(toggleButton()));
     trayIcon->show();
     setWindowIcon(icon);
     shutterEffect.setSource(QUrl::fromLocalFile(shutterEffectFileName));
     shutterEffect.setVolume(0.25f);
+    jingleEffect.setSource(QUrl::fromLocalFile(jingleEffectFileName));
+    jingleEffect.setVolume(0.25f);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::setSaveDirectory()
+{
+    localDirectory = QFileDialog::getExistingDirectory();
+    ui->directorySaveFilesLineEdit->setText(localDirectory);
+}
+
+void MainWindow::toggleButton()
+{
+    ui->browseDirectoriesPushButton->setEnabled(!ui->browseDirectoriesPushButton->isEnabled());
 }
 
 void MainWindow::changeEvent(QEvent *event)
@@ -98,7 +112,7 @@ void MainWindow::shootScreen()
 
 void MainWindow::saveScreenshot()
 {
-    fileName = "untitled.png";
+    fileName = "Screenshot-" + QDateTime::currentDateTime().toTimeSpec(Qt::OffsetFromUTC).toString(Qt::ISODate) + ".png";
     QFile file(fileName);
     file.open(QIODevice::WriteOnly);
     originalPixmap.save(&file, "PNG");
@@ -131,7 +145,19 @@ void MainWindow::replyFinished(QNetworkReply* reply)
     clipboard->setText(stringReply);
     ui->label->setText(stringReply);
     QApplication::beep();
+    jingleEffect.play();
     trayIcon->showMessage("PoPi - Image uploaded!", stringReply, icon, 3000);
+    QFile file(fileName);
+    if (!ui->saveFilesCheckBox->isChecked())
+    {
+        file.remove();
+    }
+    else
+    {
+        QString fullPath = QDir(localDirectory).filePath(fileName);
+        file.rename(fullPath);
+        file.close();
+    }
 }
 
 QString MainWindow::convertScreenshot()

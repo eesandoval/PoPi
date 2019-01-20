@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>media/camera_shutter.wav</file>
         <file>media/icon.png</file>
+        <file>media/jingle.wav</file>
     </qresource>
 </RCC>

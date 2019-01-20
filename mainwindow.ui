@@ -7,38 +7,70 @@
     <x>0</x>
     <y>0</y>
     <width>406</width>
-    <height>90</height>
+    <height>183</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>PoPi - The Screenshot Tool</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QLabel" name="label">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>301</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>To take a screenshot, press CTRL + Shift + 4</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>20</y>
       <width>381</width>
-      <height>17</height>
+      <height>131</height>
      </rect>
     </property>
-    <property name="text">
-     <string>Closing this window will hide PoPi to the system tray</string>
-    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>To take a screenshot, press CTRL + Shift + 4</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Closing this window will hide PoPi to the system tray</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QCheckBox" name="saveFilesCheckBox">
+         <property name="text">
+          <string>Save files locally</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLineEdit" name="directorySaveFilesLineEdit">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="browseDirectoriesPushButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Browse</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>

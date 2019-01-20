@@ -28,6 +28,8 @@ protected:
 private slots:
     void replyFinished(QNetworkReply* reply);
     void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
+    void setSaveDirectory();
+    void toggleButton();
 
 private:
     Ui::MainWindow *ui;
@@ -39,16 +41,19 @@ private:
     bool overrideMinimize = false;
 
     QString shutterEffectFileName = ":/media/camera_shutter.wav";
+    QString jingleEffectFileName = ":/media/jingle.wav";
     QString iconFileName = ":/media/icon.png";
     QPixmap originalPixmap;
     QString fileName;
     QUrl imgurURL;
     QSoundEffect shutterEffect;
+    QSoundEffect jingleEffect;
     QSystemTrayIcon *trayIcon;
     QMenu *trayIconMenu;
     QAction *quitAction;
     QIcon icon;
     captureregion *region;
+    QString localDirectory = "";
 };
 
 #endif // MAINWINDOW_H
