@@ -39,6 +39,8 @@ private:
     QString convertScreenshot();
     bool displayedTrayMessage = false;
     bool overrideMinimize = false;
+    void loadSettings();
+    void saveSettings();
 
     QString shutterEffectFileName = ":/media/camera_shutter.wav";
     QString jingleEffectFileName = ":/media/jingle.wav";
@@ -54,6 +56,7 @@ private:
     QIcon icon;
     captureregion *region;
     QString localDirectory = "";
+    QString settingsFile = "settings.ini";
 };
 
 #endif // MAINWINDOW_H

@@ -13,6 +13,8 @@
 #include <QJsonObject>
 #include <QMenu>
 #include <QFileDialog>
+#include <QTimer>
+#include <QSettings>
 #include "captureregion.h"
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -38,11 +40,30 @@ MainWindow::MainWindow(QWidget *parent) :
     shutterEffect.setVolume(0.25f);
     jingleEffect.setSource(QUrl::fromLocalFile(jingleEffectFileName));
     jingleEffect.setVolume(0.25f);
+    loadSettings();
 }
 
 MainWindow::~MainWindow()
 {
+    saveSettings();
     delete ui;
+}
+
+void MainWindow::loadSettings()
+{
+    QSettings settings(settingsFile, QSettings::NativeFormat);
+    QString settingssaveDirectory = settings.value("saveDirectory", "").toString();
+    if (settingssaveDirectory == "")
+        return;
+    localDirectory = settingssaveDirectory;
+    ui->directorySaveFilesLineEdit->setText(localDirectory);
+    ui->saveFilesCheckBox->setChecked(true);
+}
+
+void MainWindow::saveSettings()
+{
+    QSettings settings(settingsFile, QSettings::NativeFormat);
+    settings.setValue("saveDirectory", localDirectory);
 }
 
 void MainWindow::setSaveDirectory()
@@ -58,19 +79,16 @@ void MainWindow::toggleButton()
 
 void MainWindow::changeEvent(QEvent *event)
 {
-    if (event->type() == QEvent::WindowStateChange && isMinimized() && !overrideMinimize)
+    if (event->type() == QEvent::WindowStateChange && (this->windowState() & isMinimized()))
     {
-        this->hide();
+        QTimer::singleShot(0, this, SLOT(hide()));
         if (!displayedTrayMessage)
         {
             trayIcon->showMessage("PoPi - Minimized", "PoPi will stay minimized in the system tray. To quit, right click the icon and choose <b>Quit</b>", icon, 3000);
             displayedTrayMessage = true;
         }
     }
-    else
-    {
-        return QMainWindow::changeEvent(event);
-    }
+    return QMainWindow::changeEvent(event);
 }
 
 void MainWindow::handleRegionShortcut()
@@ -87,7 +105,6 @@ void MainWindow::handleRegionShortcut()
 
 void MainWindow::returnRegionShortcut(QPixmap *image)
 {
-
     this->originalPixmap = *(image);
     region->close();
     Qt::WindowFlags flags = windowFlags();
@@ -177,5 +194,6 @@ void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
     if (reason == QSystemTrayIcon::Trigger || reason == QSystemTrayIcon::DoubleClick || reason == QSystemTrayIcon::MiddleClick)
     {
         this->show();
+        this->showNormal();
     }
 }
