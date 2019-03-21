@@ -6,31 +6,30 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>406</width>
-    <height>183</height>
+    <width>400</width>
+    <height>225</height>
    </rect>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>9999999</width>
+    <height>9999999</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>PoPi - The Screenshot Tool</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>381</width>
-      <height>131</height>
+      <x>11</x>
+      <y>1</y>
+      <width>370</width>
+      <height>104</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>To take a screenshot, press CTRL + Shift + 4</string>
-       </property>
-      </widget>
-     </item>
      <item>
       <widget class="QLabel" name="label_2">
        <property name="text">
@@ -69,6 +68,35 @@
         </layout>
        </item>
       </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>11</x>
+      <y>111</y>
+      <width>371</width>
+      <height>66</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <item>
+      <widget class="QLabel" name="regionShortcutLabel">
+       <property name="text">
+        <string>Set hotkey for screenshots</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QKeySequenceEdit" name="regionShortcutKeySeqEdit">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="keySequence">
+        <string>Ctrl+Shift+4</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>

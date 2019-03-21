@@ -49,14 +49,15 @@ private:
     QString fileName;
     QUrl imgurURL;
     QSoundEffect shutterEffect;
+    QIcon icon;
     QSoundEffect jingleEffect;
     QSystemTrayIcon *trayIcon;
     QMenu *trayIconMenu;
     QAction *quitAction;
-    QIcon icon;
     captureregion *region;
     QString localDirectory = "";
     QString settingsFile = "settings.ini";
+    Qt::WindowFlags currentFlags;
 };
 
 #endif // MAINWINDOW_H

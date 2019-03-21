@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     jingleEffect(this)
 {
     ui->setupUi(this);
+    setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint );
     imgurURL = QUrl("https://api.imgur.com/3/image");
     quitAction = new QAction(tr("&Quit"), this);
     connect(quitAction, &QAction::triggered, this, &QCoreApplication::quit);
@@ -93,6 +94,7 @@ void MainWindow::changeEvent(QEvent *event)
 
 void MainWindow::handleRegionShortcut()
 {
+    currentFlags = this->windowFlags();
     overrideMinimize = true;
     this->setWindowFlags(Qt::FramelessWindowHint);
     this->showFullScreen();
@@ -107,9 +109,9 @@ void MainWindow::returnRegionShortcut(QPixmap *image)
 {
     this->originalPixmap = *(image);
     region->close();
-    Qt::WindowFlags flags = windowFlags();
-    flags &= -Qt::FramelessWindowHint;
-    setWindowFlags(flags);
+    //Qt::WindowFlags flags = windowFlags();
+    //flags &= -Qt::FramelessWindowHint;
+    setWindowFlags(currentFlags);
     this->hide();
     saveScreenshot();
     uploadScreenshot();
@@ -160,8 +162,6 @@ void MainWindow::replyFinished(QNetworkReply* reply)
     QString stringReply =  link.toString();
     QClipboard *clipboard = QGuiApplication::clipboard();
     clipboard->setText(stringReply);
-    ui->label->setText(stringReply);
-    QApplication::beep();
     jingleEffect.play();
     trayIcon->showMessage("PoPi - Image uploaded!", stringReply, icon, 3000);
     QFile file(fileName);
